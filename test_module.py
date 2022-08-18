@@ -1,5 +1,8 @@
 import unittest
-from time_calculator import add_time
+from time_calculator import (add_time,
+                             _split_twelve_hour,
+                             _convert_to_minutes,
+                             _convert_to_twelvehour)
 
 
 class UnitTests(unittest.TestCase):
@@ -63,6 +66,47 @@ class UnitTests(unittest.TestCase):
         actual = add_time("8:16 PM", "466:02", "tuesday")
         expected = "6:18 AM, Monday (20 days later)"
         self.assertEqual(actual, expected, 'Expected calling "add_time()" with "8:16 PM", "466:02", "tuesday" to return "6:18 AM, Monday (20 days later)"')
+
+    def test_util_split_twelve_hour(self):
+        actual = _split_twelve_hour("12:01 PM")
+        expected = ("12", "01", "PM")
+        self.assertEqual(actual, expected, 'Expected calling \
+                         "_split_twelve_hour" with "12:01 PM" to equal' +
+                         '("12", "01", "PM")')
+
+    def test_util_split_twelve_hour_no_phase(self):
+        actual = _split_twelve_hour("12:01")
+        expected = ("12", "01", None)
+        self.assertEqual(actual, expected, 'Expected calling \
+                         "_split_twelve_hour" with "12:01" to equal \
+                         ("12", "01", None)')
+
+    def test_util_convert_to_minutes(self):
+        actual = _convert_to_minutes("1:41 PM")
+        expected = 821
+        self.assertEqual(actual, expected, 'Expected calling \
+                         "_convert_to_minutes" with "1: 41 PM" to return 821')
+
+    def test_util_convert_to_minutes_duration(self):
+        actual = _convert_to_minutes("3:12")
+        expected = 192
+        self.assertEqual(actual, expected, 'Expected calling \
+                         "_convert_to_minutes_duration" with "3:12" to \
+                         return 192')
+
+    def test_util_convert_to_twelvehour(self):
+        actual = _convert_to_twelvehour(821)
+        expected = "1:41 PM"
+        self.assertEqual(actual, expected, 'Expected calling \
+                         "_convert_to_twelvehour"  with 821 to \
+                         return "1:41 PM"')
+
+    def test_util_convert_to_twelvehour_zero_hour(self):
+        actual = _convert_to_twelvehour(4)
+        expected = "12:04 AM"
+        self.assertEqual(actual, expected, 'Expected calling \
+                "_convert_to_twelvehour" with 04 to return "12:04 AM"')
+
 
 if __name__ == "__main__":
     unittest.main()
